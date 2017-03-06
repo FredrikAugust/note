@@ -10,5 +10,5 @@ let should = chai.should();
 chai.use(chaiHttp);
 
 describe('getting notes', () => {
-  // TODO
+  // TODO: test notes
 });

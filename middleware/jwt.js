@@ -1,6 +1,5 @@
 'use strict';
 
-let bcrypt = require('bcrypt-nodejs');
 let jwt = require('jsonwebtoken');
 
 const secret = process.env.JWT_SECRET || "fishingfish";

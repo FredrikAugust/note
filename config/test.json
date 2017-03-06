@@ -1,0 +1,5 @@
+{
+  "mongo": {
+    "database": "test_note"
+  }
+}

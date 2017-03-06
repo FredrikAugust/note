@@ -1,0 +1,8 @@
+{
+  "mongo": {
+    "database": "note"
+  },
+  "jwt": {
+    "secret": "bananaphone"
+  }
+}

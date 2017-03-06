@@ -8,7 +8,6 @@
   "license": "MIT",
   "dependencies": {
     "body-parser": "^1.17.0",
-    "config": "^1.25.1",
     "express": "^4.15.1",
     "morgan": "^1.8.1"
   },

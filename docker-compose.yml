@@ -3,7 +3,7 @@ services:
   web:
     build: .
     ports:
-      - "8888:8888"
+      - "3000:8888"
     volumes:
       - .:/usr/src/app
     environment:
@@ -12,10 +12,10 @@ services:
     hostname: mongo
     image: "mongo:latest"
     ports:
-      - "27017:27017"
+      - "27070"
   elasticsearch:
     hostname: elasticsearch
     image: "docker.elastic.co/elasticsearch/elasticsearch:5.2.2"
     ports:
-      - "9200:9200"
-      - "9300:9300"
+      - "9200"
+      - "9300"

@@ -9,6 +9,8 @@ WORKDIR /usr/src/app
 COPY package.json /usr/src/app
 RUN yarn
 
+RUN ["npm", "install", "-g", "mocha"]
+
 ADD . /usr/src/app
 
 EXPOSE 8888

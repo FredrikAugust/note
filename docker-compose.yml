@@ -6,6 +6,7 @@ services:
       - "3000:8888"
     volumes:
       - .:/usr/src/app
+    working_dir: /usr/src/app
     environment:
       WAIT_HOSTS: mongo:27017, elasticsearch:9200
   mongo:

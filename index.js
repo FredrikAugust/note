@@ -3,6 +3,15 @@
 let express = require("express");
 let morgan = require("morgan");
 let bodyParser = require("body-parser");
+let mongoose = require('mongoose');
+let elasticsearch = require('elasticsearch');
+
+mongoose.connect('mongodb://mongo/note');
+
+let elasticClient = elasticsearch.Client({
+  host: 'elasticsearch:9200',
+  log: 'trace'
+});
 
 const app = express();
 

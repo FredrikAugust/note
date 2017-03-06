@@ -1,4 +1,7 @@
-FROM node:4-onbuild
+FROM node:latest
+
+RUN apt update
+RUN apt install netcat-openbsd
 
 RUN ["mkdir", "-p", "/usr/src/app"]
 WORKDIR /usr/src/app
@@ -6,7 +9,10 @@ WORKDIR /usr/src/app
 COPY package.json /usr/src/app
 RUN yarn
 
-COPY . /usr/src/app
+ADD . /usr/src/app
 
 EXPOSE 8888
-CMD ["npm", "start"]
+
+ADD https://raw.githubusercontent.com/ufoscout/docker-compose-wait/1.0.0/wait.sh /wait.sh
+RUN chmod +x /wait.sh
+CMD /wait.sh && npm start

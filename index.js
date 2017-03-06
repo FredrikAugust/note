@@ -6,6 +6,8 @@ let bodyParser = require("body-parser");
 let mongoose = require('mongoose');
 let elasticsearch = require('elasticsearch');
 
+let jwtMiddleware = require('./middleware/jwt');
+
 mongoose.connect('mongodb://mongo/note');
 
 let elasticClient = elasticsearch.Client({
@@ -23,13 +25,17 @@ if (process.env.NODE_ENV !== 'test') {
 
 app.use(bodyParser.json({ type: 'application/json' }));
 
-// Middleware for authentication
-// app.use(jwt..);
-// We want this to trigger for everything except /token
+app.use(jwtMiddleware);
 
 // All notes
-app.get('/notes', (req, res) => {
+app.get('/note', (req, res) => {
   // Respond with object containing note
+  res.json({});
+});
+
+// Search, query elastic
+app.get('/note/search', (req, res) => {
+  // Respond with an array of notes found matching pattern
   res.json({});
 });
 
@@ -39,14 +45,8 @@ app.get('/note/:id', (req, res) => {
   res.json({});
 });
 
-// Search, query elastic
-app.get('/search', (req, res) => {
-  // Respond with an array of notes found matching pattern
-  res.json({});
-});
-
 // Create note
-app.post('/create', (req, res) => {
+app.post('/note', (req, res) => {
   // Create note and index in elastic
   // Respond with errors or success
   res.json({});
@@ -67,8 +67,14 @@ app.delete('/note/:id', (req, res) => {
   res.json({});
 });
 
-// Auth
-app.post('/token', (req, res) => {
+// Auth stuff
+app.post('/auth/sign_in', (req, res) => {
+  // Takes the parameters required to authenticate; username and pass
+  // Responds with a valid token or invalid credentials
+  res.json({});
+});
+
+app.post('/auth/sign_up', (req, res) => {
   // Takes the parameters required to authenticate; username and pass
   // Responds with a valid token or invalid credentials
   res.json({});

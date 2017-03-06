@@ -18,7 +18,7 @@
   },
   "scripts": {
     "start": "node index.js",
-    "test": "mocha -t 10000"
+    "test": "./node_modules/.bin/mocha -t 10000 --reporter spec"
   },
   "devDependencies": {
     "chai": "^3.5.0",

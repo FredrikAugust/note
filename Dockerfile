@@ -10,7 +10,7 @@ COPY package.json /usr/src/app
 
 ADD . /usr/src/app
 
-RUN cd /usr/src/app && yarn
+RUN yarn
 
 EXPOSE 8888
 

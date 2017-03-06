@@ -1,0 +1,12 @@
+version: '2'
+services:
+  web:
+    build: .
+    ports:
+      - "8888:8888"
+    volumes:
+      - .:/usr/src/app
+  mongo:
+    image: "mongo:latest"
+  elasticsearch:
+    image: "docker.elastic.co/elasticsearch/elasticsearch:5.2.2"

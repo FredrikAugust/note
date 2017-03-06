@@ -124,7 +124,7 @@ app.post('/auth/sign_up', (req, res) => {
   user.save((err) => {
     if (err) {
       res.status(500);
-      return res.json({"error": "Could not save user: " + err});
+      return res.json({"error": "Could not save user"});
     }
 
     res.json({"token": toke(username)})

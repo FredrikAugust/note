@@ -1,0 +1,15 @@
+{
+  "name": "note",
+  "version": "1.0.0",
+  "description": "Note-taking web app with full-text search",
+  "main": "index.js",
+  "repository": "git@github.com:fredrikaugust/note",
+  "author": "Fredrik August Madsen-Malmo <mail.fredrikaugust@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.15.1"
+  },
+  "scripts": {
+    "start": "node index.js"
+  }
+}

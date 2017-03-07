@@ -13,14 +13,14 @@ module.exports = (req, res, next) => {
   var decoded_token;
 
   if (!token) {
-    res.status(401);
+    res.status(400);
     return res.json({"error": "Missing Bearer header in request"});
   }
 
   try {
     decoded_token = jwt.verify(token, secret);
   } catch(err) {
-    res.status(400);
+    res.status(401);
     return res.json({"error": "Invalid Bearer token"});
   }
 

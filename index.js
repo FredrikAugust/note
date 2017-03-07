@@ -154,19 +154,29 @@ app.post('/note', (req, res) => {
 // }}}
 
 // PUT /note/:id{{{
-// FIXME: This will actually create a new note if it doesn't exist
-// FIXME: No authentication here, anyone can edit notes
 app.put('/note/:id', (req, res) => {
   if (!req.body.title || !req.body.body) {
     res.status(400);
     return res.json({"error": "Invalid request, missing body or title"});
   }
 
-  elasticClient.index({
+  elasticClient.updateByQuery({
     index: "notes",
     type: "note",
     id: req.params.id,
     body: {
+      query: {
+        bool: {
+          must: [
+            {
+              term: { "_id": req.params.id }
+            },
+            {
+              term: { username: req.user }
+            }
+          ]
+        }
+      },
       title: req.body.title,
       body: req.body.body,
       username: req.user
@@ -178,19 +188,30 @@ app.put('/note/:id', (req, res) => {
       return res.json({"error": "Could not update note"});
     }
 
-    elasticClient.indices.refresh();
+    console.log(resp);
     res.json({"ok": "Successfully updated note"});
   });
 });
 // }}}
 
 // DELETE /note/:id{{{
-// FIXME: No authentication here, anyone can delete notes with the id
 app.delete('/note/:id', (req, res) => {
-  elasticClient.delete({
+  elasticClient.deleteByQuery({
     index: 'notes',
-    type: 'note',
-    id: req.params.id
+    body: {
+      query: {
+        bool: {
+          must: [
+            {
+              term: { "_id": req.params.id }
+            },
+            {
+              term: { username: req.user }
+            }
+          ]
+        }
+      }
+    }
   }, (err, resp) => {
     if (err) {
       res.status(500);
@@ -198,7 +219,11 @@ app.delete('/note/:id', (req, res) => {
       return res.json({"error": "Internal server error occured, can't delete note"});
     }
 
-    res.json({"ok": "Note was deleted"});
+    if (resp.deleted != 0) {
+      res.json({"ok": "Note was deleted"});
+    } else {
+      res.json({"error": "No notes deleted, perhaps you don't own this note?"})
+    }
   });
 });
 // }}}
@@ -256,8 +281,9 @@ app.post('/auth/sign_up', (req, res) => {
       return res.json({"error": "Could not save user"});
     }
 
-    console.log("Created new user: " + username);
-    res.json({"token": toke(username)})
+    let token = toke(username);
+    console.log("Created new user: " + username + " with token: " + token);
+    res.json({"token": token})
   });
 });
 // }}}

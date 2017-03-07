@@ -82,6 +82,7 @@ app.delete('/note/:id', (req, res) => {
 // POST /auth/sign_in{{{
 app.post('/auth/sign_in', (req, res) => {
   if (!req.body.username || !req.body.password) {
+    console.warn("Request did not contain username and password");
     res.status(400);
     return res.json({"error": "Malformed request, you must provide a username and password"})
   }
@@ -91,10 +92,12 @@ app.post('/auth/sign_in', (req, res) => {
   query.findOne((err, user) => {
     if (err) {
       res.status(500);
+      console.error(err);
       return res.json({"error": "An internal server error occured"});
     }
 
     if (!user) {
+      console.warn("Request requesting non-existant user");
       res.status(400);
       return res.json({"error": "No such user exists"});
     }
@@ -103,6 +106,7 @@ app.post('/auth/sign_in', (req, res) => {
       return res.json({"token": toke(req.body.username)});
     }
 
+    console.warn("User tried to log in to user with incorrect password");
     res.status(401);
     res.json({"error": "Invalid password provided"});
   });
@@ -124,9 +128,11 @@ app.post('/auth/sign_up', (req, res) => {
   user.save((err) => {
     if (err) {
       res.status(500);
+      console.error(err);
       return res.json({"error": "Could not save user"});
     }
 
+    console.log("Created new user: " + username);
     res.json({"token": toke(username)})
   });
 });

@@ -1,8 +1,9 @@
 'use strict';
 
 let jwt = require('jsonwebtoken');
+let config = require('config');
 
-const secret = process.env.JWT_SECRET || "fishingfish";
+const secret = config.get('jwt.secret');
 
 module.exports = (req, res, next) => {
   // If the user is trying to get the token/sign up

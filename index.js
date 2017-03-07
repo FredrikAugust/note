@@ -16,9 +16,12 @@ let jwtMiddleware = require('./middleware/jwt');
 mongoose.connect('mongodb://mongo/' + config.get('mongo.database'));
 
 let elasticClient = elasticsearch.Client({
-  host: 'elasticsearch:9200',
+  host: config.get('elasticsearch.username') + ':' + config.get('elasticsearch.password') + '@elasticsearch:9200',
   log: 'trace'
 });
+
+// Setup Note index/type
+require('./models/Note')(elasticClient);
 
 const app = express();
 
@@ -35,8 +38,24 @@ app.use(jwtMiddleware);
 
 // GET /note{{{
 app.get('/note', (req, res) => {
-  // Respond with object containing note
-  res.json({});
+  // Respond with object containing all notes
+  elasticClient.search({
+    index: 'notes',
+    type: 'note',
+    body: {
+      query: {
+        term: {
+          username: req.user
+        }
+      }
+    }
+  }).then((resp) => {
+    res.json(resp.hits.hits);
+  }, (err) => {
+    res.status(500);
+    console.error(err.message);
+    return res.json({"error": "Could not retrieve elasticsearch results"});
+  });
 });
 // }}}
 
@@ -56,9 +75,29 @@ app.get('/note/:id', (req, res) => {
 
 // POST /note{{{
 app.post('/note', (req, res) => {
-  // Create note and index in elastic
-  // Respond with errors or success
-  res.json({});
+  if (!req.body.title || !req.body.body) {
+    res.status(400);
+    return res.json({"error": "Invalid request, missing body or title"});
+  }
+
+  elasticClient.index({
+    index: "notes",
+    type: "note",
+    body: {
+      title: req.body.title,
+      body: req.body.body,
+      username: req.user
+    }
+  }, (err, resp) => {
+    if (err) {
+      console.error(err);
+      res.status(500);
+      return res.json({"error": "Could not save note"});
+    }
+
+    elasticClient.indices.refresh();
+    res.json({"ok": "New post created"});
+  });
 });
 // }}}
 

@@ -4,5 +4,9 @@
   },
   "jwt": {
     "secret": "bananaphone"
+  },
+  "elasticsearch": {
+    "username": "elastic",
+    "password": "changeme"
   }
 }

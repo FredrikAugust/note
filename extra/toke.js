@@ -5,6 +5,6 @@ let config = require('config');
 
 module.exports = (username) => {
   return jwt.sign({
-    username: username
+    user: username
   }, config.get('jwt.secret'));
 };

@@ -26,7 +26,7 @@ require('./models/Note')(elasticClient);
 
 const app = express();
 
-let port = 8888;
+let port = config.get('server.port');
 
 if (process.env.NODE_ENV !== 'test') {
   app.use(morgan('tiny'));
@@ -163,7 +163,6 @@ app.put('/note/:id', (req, res) => {
   elasticClient.updateByQuery({
     index: "notes",
     type: "note",
-    id: req.params.id,
     body: {
       query: {
         bool: {
@@ -177,9 +176,9 @@ app.put('/note/:id', (req, res) => {
           ]
         }
       },
-      title: req.body.title,
-      body: req.body.body,
-      username: req.user
+      script: {
+        inline: "ctx._source.title='" + req.body.title + "'; ctx._source.body='" + req.body.body + "';"
+      }
     }
   }, (err, resp) => {
     if (err) {
@@ -188,8 +187,11 @@ app.put('/note/:id', (req, res) => {
       return res.json({"error": "Could not update note"});
     }
 
-    console.log(resp);
-    res.json({"ok": "Successfully updated note"});
+    if (resp.updated != 0) {
+      res.json({"ok": "Note was edited"});
+    } else {
+      res.json({"error": "No notes edited, perhaps you don't own this note?"})
+    }
   });
 });
 // }}}

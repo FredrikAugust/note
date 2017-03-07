@@ -19,8 +19,5 @@
   },
   "scripts": {
     "start": "node index.js"
-  },
-  "devDependencies": {
-    "assert": "^1.4.1"
   }
 }

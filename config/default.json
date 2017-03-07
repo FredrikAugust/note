@@ -8,5 +8,8 @@
   "elasticsearch": {
     "username": "elastic",
     "password": "changeme"
+  },
+  "server": {
+    "port": 8888
   }
 }

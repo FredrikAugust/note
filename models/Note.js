@@ -8,8 +8,8 @@ module.exports = (client) => {
       "mappings": {
         "note": {
           "properties": {
-            "title": { "type": "string", "index": "analyzed" },
-            "body": { "type": "string", "index": "analyzed" },
+            "title": { "type": "string", "index": "analyzed", "analyzer": "simple" },
+            "body": { "type": "string", "index": "analyzed", "analyzer": "simple" },
             "username": { "type": "string", "index": "not_analyzed" }
           }
         }

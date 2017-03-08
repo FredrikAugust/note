@@ -4,6 +4,12 @@
 
 This is a web application for keeping track of your notes
 
+**BE AWARE! This application is very insecure (hardcoded secret for jwt and no authentication for MongoDB (and I think we all know why that's bad)), so don't use it in production.**
+
+If it's not ready for prod, then why'd you make it? To keep myself busy during some extraordinary boring school days.
+
+Do you expect me to take notes by passing sending CURL requests from the command line? No. Run this and use https://github.com/fredrikaugust/note-front-end for front-end.
+
 ## Run
 
     docker-compose up
